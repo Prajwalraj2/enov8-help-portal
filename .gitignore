@@ -1,0 +1,15 @@
+# node dependencies
+node_modules/
+
+# dotenv environment file
+.env
+
+# logs
+*.log
+
+# macOS / system clutter
+.DS_Store
+
+# Docker override configs (optional)
+docker-compose.override.yml
+.env.*

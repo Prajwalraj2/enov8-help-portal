@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enov8 Help Admin Panel</title>
+  <link rel="icon" type="image/x-icon" href="/favicon-32x32.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/theme.css" />
+  
+  <style>
+    /* Google Fonts Import - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      /* Force dark theme for admin */
+      --body-color: #0d1117;
+      --sidebar-color: #161b22;
+      --primary-color: #238636;
+      --primary-color-light: #21262d;
+      --toggle-color: #30363d;
+      --text-color: #e6edf3;
+      --border-color: #30363d;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      --tran-03: all 0.2s ease;
+      --tran-04: all 0.3s ease;
+    }
+
+    body {
+      background-color: var(--body-color);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      padding-top: 80px;
+      min-height: 100vh;
+    }
+
+    /* Admin Sidebar */
+    .admin-sidebar {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      height: calc(100vh - 80px);
+      width: 280px;
+      background: var(--sidebar-color);
+      border-right: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .admin-sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-track {
+      background: var(--primary-color-light);
+    }
+
+    .admin-sidebar::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 3px;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a32 100%);
+    }
+
+    .sidebar-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-item {
+      margin: 8px 16px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--tran-03);
+      font-weight: 500;
+      gap: 12px;
+    }
+
+    .nav-link:hover {
+      background-color: var(--primary-color-light);
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      min-width: 20px;
+    }
+
+    /* Main Content */
+    .admin-content {
+      margin-left: 280px;
+      padding: 32px;
+      min-height: calc(100vh - 80px);
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    /* Cards */
+    .admin-card {
+      background-color: var(--sidebar-color);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Forms */
+    .form-label {
+      color: var(--text-color);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+      background-color: var(--primary-color-light);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      transition: var(--tran-03);
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: var(--primary-color-light);
+      border-color: var(--primary-color);
+      color: var(--text-color);
+      box-shadow: 0 0 0 0.25rem rgba(35, 134, 54, 0.25);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a32 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+      transition: var(--tran-03);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+    }
+
+    /* Tables */
+    .table-dark {
+      background-color: var(--sidebar-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-dark th {
+      background-color: var(--primary-color-light);
+      border-color: var(--border-color);
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 16px;
+    }
+
+    .table-dark td {
+      border-color: var(--border-color);
+      color: var(--text-color);
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+
+    .table-dark tbody tr:hover {
+      background-color: var(--primary-color-light);
+    }
+
+    /* FAQ Items */
+    .faq-item {
+      background-color: var(--primary-color-light);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: var(--tran-03);
+    }
+
+    .faq-item:hover {
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+
+    .faq-question {
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .faq-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      font-size: 0.875rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    .faq-answer {
+      color: var(--text-color);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .faq-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Summernote Customization */
+    .note-editor {
+      background-color: var(--primary-color-light);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .note-toolbar {
+      background-color: var(--sidebar-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .note-editable {
+      background-color: var(--primary-color-light);
+      color: var(--text-color);
+    }
+
+    /* Filter Section */
+    .filter-section {
+      background-color: var(--primary-color-light);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .filter-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-color);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a32 100%);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    /* Loading States */
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-color);
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .admin-sidebar.show {
+        transform: translateX(0);
+      }
+
+      .admin-content {
+        margin-left: 0;
+        padding: 16px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Success/Error Messages */
+    .alert {
+      border-radius: 8px;
+      border: none;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      border: 1px solid rgba(40, 167, 69, 0.3);
+    }
+
+    .alert-danger {
+      background-color: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+      border: 1px solid rgba(220, 53, 69, 0.3);
+    }
+  </style>
+</head>
+<body class="dark-theme">
+  <%- include('partials/header') %>
+
+  <!-- Admin Sidebar -->
+  <nav class="admin-sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">
+        <i class="bx bx-cog"></i>
+        Admin Panel
+      </h2>
+    </div>
+    
+    <div class="nav-menu">
+      <div class="nav-item">
+        <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+          <i class="bx bx-home nav-icon"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('faq')">
+          <i class="bx bx-help-circle nav-icon"></i>
+          <span>FAQ Management</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('guide')">
+          <i class="bx bx-book nav-icon"></i>
+          <span>Guide Management</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('video')">
+          <i class="bx bx-video nav-icon"></i>
+          <span>Video Management</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="admin-content">
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section active">
+      <div class="admin-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="bx bx-bar-chart-alt-2"></i>
+            Dashboard Overview
+          </h2>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="totalDomains">0</div>
+            <div class="stat-label">FAQ Domains</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="totalFaqs">0</div>
+            <div class="stat-label">Total FAQs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="conceptualFaqs">0</div>
+            <div class="stat-label">Conceptual FAQs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="practicalFaqs">0</div>
+            <div class="stat-label">Practical FAQs</div>
+          </div>
+        </div>
+
+  <div class="row">
+          <div class="col-md-6">
+            <h5 class="mb-3">Recent Activity</h5>
+            <div id="recentActivity">
+              <div class="text-center py-4">
+                <div class="loading-spinner"></div>
+                <p class="mt-3">Loading recent activity...</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5 class="mb-3">Quick Actions</h5>
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary" onclick="showSection('faq')">
+                <i class="bx bx-plus me-2"></i>Add New FAQ
+              </button>
+              <button class="btn btn-success" onclick="showSection('guide')">
+                <i class="bx bx-book-add me-2"></i>Create Guide
+              </button>
+              <button class="btn btn-warning" onclick="showSection('video')">
+                <i class="bx bx-video-plus me-2"></i>Add Video
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- FAQ Section -->
+    <div id="faq" class="content-section">
+      <!-- Domain Management -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-category"></i>
+            FAQ Domain Manager
+          </h3>
+        </div>
+        
+        <form id="domainForm" class="mb-4">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Domain Name</label>
+              <input type="text" id="domainName" class="form-control" placeholder="e.g., Environment Management" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Domain Key</label>
+              <input type="text" id="domainKey" class="form-control" placeholder="e.g., environment_management" required>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Icon Class</label>
+              <input type="text" id="domainIcon" class="form-control" placeholder="bx bx-server" value="bx bx-folder">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bx bx-save me-2"></i>Save Domain
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Key</th>
+                <th>Icon</th>
+                <th>FAQ Count</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="domainTable">
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <div class="loading-spinner"></div>
+                  <p class="mt-3 mb-0">Loading domains...</p>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
+      </div>
+
+      <!-- FAQ Entry -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-help-circle"></i>
+            FAQ Entry
+          </h3>
+        </div>
+        
+        <form id="faqForm">
+          <input type="hidden" id="editingFaqId" value="">
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Select Domain</label>
+              <select id="faqDomain" class="form-select" required>
+                <option value="">Choose domain...</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Type</label>
+              <select id="faqType" class="form-select">
+                <option value="conceptual">Conceptual</option>
+                <option value="practical">Practical</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Question</label>
+              <input type="text" id="faqQuestion" class="form-control" placeholder="Enter your question..." required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Answer</label>
+          <textarea id="faqAnswer" class="form-control summernote"></textarea>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bx bx-save me-2"></i>Save FAQ
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetFaqForm()">
+              <i class="bx bx-reset me-2"></i>Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- FAQ List -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-list-ul"></i>
+            All FAQs
+          </h3>
+        </div>
+        
+        <div class="filter-section">
+          <div class="filter-title">Filter FAQs</div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Domain:</label>
+              <select id="faqFilterDomain" class="form-select">
+                <option value="">All Domains</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Type:</label>
+              <select id="faqFilterType" class="form-select">
+                <option value="">All Types</option>
+            <option value="conceptual">Conceptual</option>
+            <option value="practical">Practical</option>
+          </select>
+        </div>
+            <div class="col-md-4">
+              <label class="form-label">Search:</label>
+              <input type="text" id="faqSearch" class="form-control" placeholder="Search questions...">
+            </div>
+          </div>
+        </div>
+        
+        <div id="faqList">
+          <div class="text-center py-5">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading FAQs...</p>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    <!-- Guide Section -->
+      <div id="guide" class="content-section">
+      <!-- Guide Category Management -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-category"></i>
+            Guide Category Manager
+          </h3>
+        </div>
+        
+        <form id="categoryForm" class="mb-4">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label">Category Name</label>
+              <input type="text" id="catName" class="form-control" placeholder="e.g., Initial TEM Setup" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Display Order</label>
+              <input type="number" id="catOrder" class="form-control" placeholder="Order" min="0">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bx bx-save me-2"></i><span id="catBtnText">Save Category</span>
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="catId" />
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Order</th>
+                <th>Guides Count</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTable">
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <div class="loading-spinner"></div>
+                  <p class="mt-3 mb-0">Loading categories...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Guide Content Management -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-book-add"></i>
+            Guide Content Manager
+          </h3>
+        </div>
+        
+        <form id="guideForm">
+          <input type="hidden" id="guideId" value="">
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Select Category</label>
+              <select id="guideCat" class="form-select" required>
+                <option value="">Choose category...</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Guide Title</label>
+              <input type="text" id="guideTitle" class="form-control" placeholder="Enter guide title..." required>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Icon Class</label>
+              <input type="text" id="guideIcon" class="form-control" placeholder="bx bx-grid" value="bx bx-book">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Display Order</label>
+              <input type="number" id="guideOrder" class="form-control" placeholder="Order" min="0">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Guide Content</label>
+            <textarea id="guideContent" class="form-control summernote-guide"></textarea>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bx bx-save me-2"></i><span id="guideBtnText">Save Guide</span>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetGuideForm()">
+              <i class="bx bx-reset me-2"></i>Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Guide List -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-list-ul"></i>
+            All Guides
+          </h3>
+        </div>
+        
+        <div class="filter-section">
+          <div class="filter-title">Filter Guides</div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Category:</label>
+              <select id="guideFilterCategory" class="form-select">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Search:</label>
+              <input type="text" id="guideSearch" class="form-control" placeholder="Search guides...">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button class="btn btn-primary w-100" onclick="loadGuides()">
+                <i class="bx bx-refresh me-2"></i>Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Order</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="guideTable">
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <div class="loading-spinner"></div>
+                  <p class="mt-3 mb-0">Loading guides...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Section -->
+      <div id="video" class="content-section">
+      <!-- Video Category Management -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-category"></i>
+            Video Category Manager
+          </h3>
+        </div>
+        
+        <form id="videoCategoryForm" class="mb-4">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Category Name</label>
+              <input type="text" id="videoCatName" class="form-control" placeholder="e.g., Environment Management" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Display Order</label>
+              <input type="number" id="videoCatOrder" class="form-control" placeholder="Order" min="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Icon Class</label>
+              <input type="text" id="videoCatIcon" class="form-control" placeholder="bx bx-video" value="bx bx-play-circle">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bx bx-save me-2"></i><span id="videoCatBtnText">Save Category</span>
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="videoCatId" />
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Icon</th>
+                <th>Order</th>
+                <th>Videos Count</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="videoCategoryTable">
+              <tr>
+                <td colspan="6" class="text-center py-4">
+                  <div class="loading-spinner"></div>
+                  <p class="mt-3 mb-0">Loading video categories...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Video Content Management -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-video-plus"></i>
+            Video Content Manager
+          </h3>
+        </div>
+        
+        <form id="videoForm">
+          <input type="hidden" id="videoId" value="">
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Select Category</label>
+              <select id="videoCategorySelect" class="form-select" required>
+                <option value="">Choose category...</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Video Title</label>
+              <input type="text" id="videoTitle" class="form-control" placeholder="Enter video title..." required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">YouTube Video ID</label>
+              <input type="text" id="youtubeId" class="form-control" placeholder="e.g., dMIpQ1bEkb0" required>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-10">
+              <label class="form-label">Video Description</label>
+              <textarea id="videoDescription" class="form-control" rows="3" placeholder="Enter video description..."></textarea>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Display Order</label>
+              <input type="number" id="videoOrder" class="form-control" placeholder="Order" min="0" value="1">
+            </div>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bx bx-save me-2"></i><span id="videoBtnText">Save Video</span>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetVideoForm()">
+              <i class="bx bx-reset me-2"></i>Reset
+            </button>
+            <button type="button" class="btn btn-info" onclick="previewVideo()" id="previewBtn" style="display: none;">
+              <i class="bx bx-play me-2"></i>Preview
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Video List -->
+      <div class="admin-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bx bx-list-ul"></i>
+            All Videos
+          </h3>
+        </div>
+        
+        <div class="filter-section">
+          <div class="filter-title">Filter Videos</div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Category:</label>
+              <select id="videoFilterCategory" class="form-select">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Search:</label>
+              <input type="text" id="videoSearch" class="form-control" placeholder="Search videos...">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-primary w-100" onclick="loadVideos()">
+                <i class="bx bx-refresh me-2"></i>Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div id="videoListContainer">
+          <div class="text-center py-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3 mb-0">Loading videos...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+<script src="/js/theme.js"></script>
+
+<script>
+  const API_BASE = '/api';
+  let allFaqs = [];
+  let allDomains = [];
+  let editingFaqId = null;
+
+  // Navigation
+  function showSection(id) {
+    $('.content-section').removeClass('active');
+    $('.nav-link').removeClass('active');
+    $('#' + id).addClass('active');
+    event.target.classList.add('active');
+    
+    // Load section-specific data
+    if (id === 'dashboard') {
+      loadDashboardStats();
+    } else if (id === 'faq') {
+      loadDomains();
+      loadFAQs();
+    } else if (id === 'guide') {
+      loadGuideCategories();
+      loadGuides();
+    } else if (id === 'video') {
+      loadVideoCategories();
+      loadVideos();
+    }
+  }
+
+  // Show success/error messages
+  function showMessage(message, type = 'success') {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const icon = type === 'success' ? 'bx-check-circle' : 'bx-error-circle';
+    
+    const alert = $(`
+      <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+        <i class="bx ${icon} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    `);
+    
+    $('.admin-content').prepend(alert);
+    setTimeout(() => alert.remove(), 5000);
+  }
+
+  // Dashboard Functions
+  function loadDashboardStats() {
+    Promise.all([
+      $.get(`${API_BASE}/faqs/domains/list`),
+      $.get(`${API_BASE}/faqs`)
+    ]).then(([domains, faqs]) => {
+      $('#totalDomains').text(domains.length);
+      $('#totalFaqs').text(faqs.length);
+      $('#conceptualFaqs').text(faqs.filter(f => f.type === 'conceptual').length);
+      $('#practicalFaqs').text(faqs.filter(f => f.type === 'practical').length);
+      
+      // Show recent activity
+      const recentFaqs = faqs.slice(-5).reverse();
+      $('#recentActivity').html(recentFaqs.map(faq => `
+        <div class="faq-item mb-2 p-2">
+          <small class="text-muted">${faq.type}</small>
+          <div class="fw-medium">${faq.q}</div>
+        </div>
+      `).join('') || '<p class="text-muted">No recent activity</p>');
+    }).catch(() => {
+      $('#recentActivity').html('<p class="text-danger">Failed to load activity</p>');
+    });
+  }
+
+  // Domain Functions
+  function loadDomains() {
+    $.get(`${API_BASE}/faqs/domains/list`)
+      .done(data => {
+        allDomains = data;
+        updateDomainSelects();
+        updateDomainTable();
+      })
+      .fail(() => {
+        showMessage('Failed to load domains', 'error');
+      });
+  }
+
+  function updateDomainSelects() {
+    const selects = $('#faqDomain, #faqFilterDomain');
+    selects.each(function() {
+      const currentVal = $(this).val();
+      $(this).empty();
+      
+      if (this.id === 'faqFilterDomain') {
+        $(this).append('<option value="">All Domains</option>');
+      } else {
+        $(this).append('<option value="">Choose domain...</option>');
+      }
+      
+      allDomains.forEach(d => {
+        $(this).append(`<option value="${d.key}">${d.name}</option>`);
+      });
+      
+      $(this).val(currentVal);
+    });
+  }
+
+  function updateDomainTable() {
+    const tbody = $('#domainTable');
+    
+    if (allDomains.length === 0) {
+      tbody.html(`
+        <tr>
+          <td colspan="5" class="text-center py-4">
+            <i class="bx bx-folder-open" style="font-size: 2rem; opacity: 0.5;"></i>
+            <p class="mt-2 mb-0">No domains found</p>
+          </td>
+        </tr>
+      `);
+      return;
+    }
+
+    tbody.html(allDomains.map(domain => {
+      const faqCount = allFaqs.filter(f => f.section === domain.key).length;
+      return `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="${domain.iconClass || 'bx bx-folder'} me-2"></i>
+              ${domain.name}
+            </div>
+          </td>
+          <td><code>${domain.key}</code></td>
+          <td><i class="${domain.iconClass || 'bx bx-folder'}"></i></td>
+          <td><span class="badge bg-primary">${faqCount}</span></td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editDomain('${domain._id}')">
+              <i class="bx bx-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteDomain('${domain._id}', '${domain.name}')">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join(''));
+  }
+
+  function editDomain(id) {
+    const domain = allDomains.find(d => d._id === id);
+    if (domain) {
+      $('#domainName').val(domain.name);
+      $('#domainKey').val(domain.key);
+      $('#domainIcon').val(domain.iconClass || 'bx bx-folder');
+      $('#domainForm').data('editing-id', id);
+    }
+  }
+
+  function deleteDomain(id, name) {
+    if (confirm(`Are you sure you want to delete "${name}" and all its FAQs?`)) {
+      $.ajax({
+        url: `${API_BASE}/faqs/domains/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage(`Domain "${name}" deleted successfully`);
+          loadDomains();
+          loadFAQs();
+        },
+        error: () => showMessage(`Failed to delete domain "${name}"`, 'error')
+      });
+    }
+  }
+
+  // FAQ Functions
+  function loadFAQs() {
+    $.get(`${API_BASE}/faqs`)
+      .done(data => {
+        allFaqs = data;
+        filterAndDisplayFaqs();
+      })
+      .fail(() => {
+        showMessage('Failed to load FAQs', 'error');
+      });
+  }
+
+  function filterAndDisplayFaqs() {
+    const domain = $('#faqFilterDomain').val();
+    const type = $('#faqFilterType').val();
+    const search = $('#faqSearch').val().toLowerCase();
+    
+    let filtered = allFaqs.filter(faq => {
+      const matchesDomain = !domain || faq.section === domain;
+      const matchesType = !type || faq.type === type;
+      const matchesSearch = !search || 
+        faq.q.toLowerCase().includes(search) || 
+        faq.a.toLowerCase().includes(search);
+      
+      return matchesDomain && matchesType && matchesSearch;
+    });
+
+    const faqList = $('#faqList');
+    
+    if (filtered.length === 0) {
+      faqList.html(`
+        <div class="text-center py-5">
+          <i class="bx bx-search-alt" style="font-size: 3rem; opacity: 0.5;"></i>
+          <h5 class="mt-3">No FAQs found</h5>
+          <p class="text-muted">Try adjusting your filters or search terms.</p>
+        </div>
+      `);
+      return;
+    }
+
+    faqList.html(filtered.map(faq => {
+      const domainName = allDomains.find(d => d.key === faq.section)?.name || faq.section;
+      const typeIcon = faq.type === 'conceptual' ? 'bx-brain' : 'bx-wrench';
+      const typeBadge = faq.type === 'conceptual' ? 'info' : 'success';
+      
+      return `
+        <div class="faq-item">
+          <div class="faq-question">
+            <i class="bx ${typeIcon} me-2 text-${typeBadge}"></i>
+            ${faq.q}
+          </div>
+          <div class="faq-meta">
+            <span><i class="bx bx-category me-1"></i>Domain: ${domainName}</span>
+            <span><i class="bx bx-tag me-1"></i>Type: ${faq.type}</span>
+          </div>
+          <div class="faq-answer">${faq.a}</div>
+          <div class="faq-actions">
+            <button class="btn btn-sm btn-warning" onclick="editFaq('${faq._id}')">
+              <i class="bx bx-edit me-1"></i>Edit
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteFaq('${faq._id}', '${faq.q.replace(/'/g, "\\'")}')">
+              <i class="bx bx-trash me-1"></i>Delete
+            </button>
+          </div>
+        </div>
+      `;
+    }).join(''));
+  }
+
+  function editFaq(id) {
+    const faq = allFaqs.find(f => f._id === id);
+    if (faq) {
+      $('#editingFaqId').val(id);
+      $('#faqDomain').val(faq.section);
+      $('#faqType').val(faq.type);
+      $('#faqQuestion').val(faq.q);
+      $('#faqAnswer').summernote('code', faq.a);
+      
+      // Scroll to form
+      $('html, body').animate({
+        scrollTop: $('#faqForm').offset().top - 100
+      }, 500);
+      
+      showMessage('FAQ loaded for editing', 'success');
+    }
+  }
+
+  function deleteFaq(id, question) {
+    if (confirm(`Are you sure you want to delete this FAQ?\n\n"${question}"`)) {
+      $.ajax({
+        url: `${API_BASE}/faqs/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage('FAQ deleted successfully');
+          loadFAQs();
+        },
+        error: () => showMessage('Failed to delete FAQ', 'error')
+      });
+    }
+  }
+
+  function resetFaqForm() {
+    $('#faqForm')[0].reset();
+    $('#editingFaqId').val('');
+    $('.summernote').summernote('reset');
+    showMessage('Form reset', 'success');
+  }
+
+  // Event Handlers
+  $(document).ready(() => {
+    // Initialize Summernote
+    $('.summernote').summernote({
+      height: 200,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+
+    // Initialize Guide Content Summernote
+    $('.summernote-guide').summernote({
+      height: 300,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+        ['fontname', ['fontname']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+
+    // Load initial data
+    loadDashboardStats();
+    loadDomains();
+    loadFAQs();
+
+    // Domain form submission
+    $('#domainForm').submit(e => {
+      e.preventDefault();
+      const editingId = $(e.target).data('editing-id');
+      const domainData = {
+        name: $('#domainName').val(),
+        key: $('#domainKey').val(),
+        iconClass: $('#domainIcon').val() || 'bx bx-folder'
+      };
+
+      const url = editingId ? `${API_BASE}/faqs/domains/${editingId}` : `${API_BASE}/faqs/domains`;
+      const method = editingId ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        method,
+        contentType: 'application/json',
+        data: JSON.stringify(domainData),
+        success: () => {
+          showMessage(`Domain ${editingId ? 'updated' : 'created'} successfully`);
+          $('#domainForm')[0].reset();
+          $(e.target).removeData('editing-id');
+          loadDomains();
+        },
+        error: (xhr) => {
+          showMessage(`Failed to ${editingId ? 'update' : 'create'} domain: ${xhr.responseText}`, 'error');
+        }
+      });
+    });
+
+    // FAQ form submission
+    $('#faqForm').submit(e => {
+      e.preventDefault();
+      const editingId = $('#editingFaqId').val();
+      const faqData = {
+        section: $('#faqDomain').val(),
+        q: $('#faqQuestion').val(),
+        a: $('#faqAnswer').val(),
+        type: $('#faqType').val()
+      };
+
+      const url = editingId ? `${API_BASE}/faqs/${editingId}` : `${API_BASE}/faqs`;
+      const method = editingId ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        method,
+        contentType: 'application/json',
+        data: JSON.stringify(faqData),
+        success: () => {
+          showMessage(`FAQ ${editingId ? 'updated' : 'created'} successfully`);
+          resetFaqForm();
+          loadFAQs();
+        },
+        error: (xhr) => {
+          showMessage(`Failed to ${editingId ? 'update' : 'create'} FAQ: ${xhr.responseText}`, 'error');
+        }
+      });
+    });
+
+    // Filter handlers
+    $('#faqFilterDomain, #faqFilterType').change(filterAndDisplayFaqs);
+    $('#faqSearch').on('input', filterAndDisplayFaqs);
+
+    // Guide form submissions
+    $('#categoryForm').submit(handleCategorySubmit);
+    $('#guideForm').submit(handleGuideSubmit);
+
+    // Guide filter handlers
+    $('#guideFilterCategory').change(filterAndDisplayGuides);
+    $('#guideSearch').on('input', filterAndDisplayGuides);
+
+    // Video form submissions
+    $('#videoCategoryForm').submit(handleVideoCategorySubmit);
+    $('#videoForm').submit(handleVideoSubmit);
+
+    // Video filter handlers
+    $('#videoFilterCategory').change(filterAndDisplayVideos);
+    $('#videoSearch').on('input', filterAndDisplayVideos);
+  });
+
+  // =================== GUIDE MANAGEMENT FUNCTIONS ===================
+  let allGuideCategories = [];
+  let allGuides = [];
+
+  // Guide Category Functions
+  function loadGuideCategories() {
+    $.get(`${API_BASE}/guide-categories`)
+      .done(data => {
+        allGuideCategories = data;
+        updateGuideCategorySelects();
+        updateGuideCategoryTable();
+      })
+      .fail(() => {
+        showMessage('Failed to load guide categories', 'error');
+      });
+  }
+
+  function updateGuideCategorySelects() {
+    const selects = $('#guideCat, #guideFilterCategory');
+    selects.each(function() {
+      const currentVal = $(this).val();
+      $(this).empty();
+      
+      if (this.id === 'guideFilterCategory') {
+        $(this).append('<option value="">All Categories</option>');
+      } else {
+        $(this).append('<option value="">Choose category...</option>');
+      }
+      
+      allGuideCategories.forEach(cat => {
+        $(this).append(`<option value="${cat._id}">${cat.name}</option>`);
+      });
+      
+      $(this).val(currentVal);
+    });
+  }
+
+  function updateGuideCategoryTable() {
+    const tbody = $('#categoryTable');
+    
+    if (allGuideCategories.length === 0) {
+      tbody.html(`
+        <tr>
+          <td colspan="5" class="text-center py-4">
+            <i class="bx bx-category" style="font-size: 2rem; opacity: 0.5;"></i>
+            <p class="mt-2 mb-0">No guide categories found</p>
+          </td>
+        </tr>
+      `);
+      return;
+    }
+
+    tbody.html(allGuideCategories.map(category => {
+      const guideCount = allGuides.filter(g => g.category === category._id).length;
+      const createdDate = new Date(category.createdAt).toLocaleDateString();
+      
+      return `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="bx bx-category me-2 text-primary"></i>
+              ${category.name}
+            </div>
+          </td>
+          <td><span class="badge bg-info">${category.order || 0}</span></td>
+          <td><span class="badge bg-success">${guideCount}</span></td>
+          <td>${createdDate}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editGuideCategory('${category._id}')">
+              <i class="bx bx-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGuideCategory('${category._id}', '${category.name}')">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join(''));
+  }
+
+  function editGuideCategory(id) {
+    const category = allGuideCategories.find(c => c._id === id);
+    if (category) {
+      $('#catName').val(category.name);
+      $('#catOrder').val(category.order || 0);
+      $('#catId').val(id);
+      $('#catBtnText').text('Update Category');
+      
+      // Scroll to form
+      $('html, body').animate({
+        scrollTop: $('#categoryForm').offset().top - 100
+      }, 500);
+    }
+  }
+
+  function deleteGuideCategory(id, name) {
+    if (confirm(`Are you sure you want to delete "${name}" and all its guides?`)) {
+      $.ajax({
+        url: `${API_BASE}/guide-categories/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage(`Category "${name}" deleted successfully`);
+          loadGuideCategories();
+          loadGuides();
+        },
+        error: () => showMessage(`Failed to delete category "${name}"`, 'error')
+      });
+    }
+  }
+
+  function handleCategorySubmit(e) {
+    e.preventDefault();
+    const editingId = $('#catId').val();
+    const categoryData = {
+      name: $('#catName').val(),
+      order: parseInt($('#catOrder').val()) || 0
+    };
+
+    const url = editingId ? `${API_BASE}/guide-categories/${editingId}` : `${API_BASE}/guide-categories`;
+    const method = editingId ? 'PUT' : 'POST';
+
+    $.ajax({
+      url,
+      method,
+      contentType: 'application/json',
+      data: JSON.stringify(categoryData),
+      success: () => {
+        showMessage(`Category ${editingId ? 'updated' : 'created'} successfully`);
+        resetCategoryForm();
+        loadGuideCategories();
+      },
+      error: (xhr) => {
+        showMessage(`Failed to ${editingId ? 'update' : 'create'} category: ${xhr.responseText}`, 'error');
+      }
+    });
+  }
+
+  function resetCategoryForm() {
+    $('#categoryForm')[0].reset();
+    $('#catId').val('');
+    $('#catBtnText').text('Save Category');
+  }
+
+  // Guide Functions
+  function loadGuides() {
+    $('#guideTable').html(`
+      <tr>
+        <td colspan="5" class="text-center py-4">
+          <div class="loading-spinner"></div>
+          <p class="mt-3 mb-0">Loading guides...</p>
+        </td>
+      </tr>
+    `);
+
+    // Load all guides for all categories
+    Promise.all(
+      allGuideCategories.map(cat => 
+        $.get(`${API_BASE}/guides/category/${cat._id}`)
+          .then(guides => guides.map(guide => ({...guide, categoryName: cat.name})))
+      )
+    ).then(results => {
+      allGuides = results.flat();
+      updateGuideCategoryTable(); // Update category table with guide counts
+      filterAndDisplayGuides();
+    }).catch(() => {
+      showMessage('Failed to load guides', 'error');
+      $('#guideTable').html(`
+        <tr>
+          <td colspan="5" class="text-center py-4 text-danger">
+            <i class="bx bx-error-circle me-2"></i>Failed to load guides
+          </td>
+        </tr>
+      `);
+    });
+  }
+
+  function filterAndDisplayGuides() {
+    const categoryFilter = $('#guideFilterCategory').val();
+    const searchTerm = $('#guideSearch').val().toLowerCase();
+    
+    let filtered = allGuides.filter(guide => {
+      const matchesCategory = !categoryFilter || guide.category === categoryFilter;
+      const matchesSearch = !searchTerm || 
+        guide.guidetitle.toLowerCase().includes(searchTerm) ||
+        guide.guidecontent.toLowerCase().includes(searchTerm);
+      
+      return matchesCategory && matchesSearch;
+    });
+
+    const tbody = $('#guideTable');
+    
+    if (filtered.length === 0) {
+      tbody.html(`
+        <tr>
+          <td colspan="5" class="text-center py-4">
+            <i class="bx bx-search-alt" style="font-size: 2rem; opacity: 0.5;"></i>
+            <p class="mt-2 mb-0">No guides found</p>
+          </td>
+        </tr>
+      `);
+      return;
+    }
+
+    tbody.html(filtered.map(guide => {
+      const createdDate = new Date(guide.createdAt).toLocaleDateString();
+      const iconClass = guide.iconClass || 'bx bx-book';
+      
+      return `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="${iconClass} me-2 text-primary"></i>
+              ${guide.guidetitle}
+            </div>
+          </td>
+          <td><span class="badge bg-primary">${guide.categoryName}</span></td>
+          <td><span class="badge bg-info">${guide.guideorder || 0}</span></td>
+          <td>${createdDate}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editGuide('${guide._id}')">
+              <i class="bx bx-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGuide('${guide._id}', '${guide.guidetitle.replace(/'/g, "\\'")}')">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join(''));
+  }
+
+  function editGuide(id) {
+    // Fetch specific guide details
+    $.get(`${API_BASE}/guides/view/${id}`)
+      .done(guide => {
+        $('#guideId').val(id);
+        $('#guideCat').val(guide.category);
+        $('#guideTitle').val(guide.guidetitle);
+        $('#guideIcon').val(guide.iconClass || 'bx bx-book');
+        $('#guideOrder').val(guide.guideorder || 0);
+        $('#guideContent').summernote('code', guide.guidecontent);
+        $('#guideBtnText').text('Update Guide');
+        
+        // Scroll to form
+        $('html, body').animate({
+          scrollTop: $('#guideForm').offset().top - 100
+        }, 500);
+        
+        showMessage('Guide loaded for editing', 'success');
+      })
+      .fail(() => {
+        showMessage('Failed to load guide details', 'error');
+      });
+  }
+
+  function deleteGuide(id, title) {
+    if (confirm(`Are you sure you want to delete this guide?\n\n"${title}"`)) {
+      $.ajax({
+        url: `${API_BASE}/guides/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage('Guide deleted successfully');
+          loadGuides();
+        },
+        error: () => showMessage('Failed to delete guide', 'error')
+      });
+    }
+  }
+
+  function handleGuideSubmit(e) {
+    e.preventDefault();
+    const editingId = $('#guideId').val();
+    const guideData = {
+      category: $('#guideCat').val(),
+      guidetitle: $('#guideTitle').val(),
+      guidecontent: $('#guideContent').summernote('code'),
+      iconClass: $('#guideIcon').val() || 'bx bx-book',
+      guideorder: parseInt($('#guideOrder').val()) || 0
+    };
+
+    const url = editingId ? `${API_BASE}/guides/${editingId}` : `${API_BASE}/guides`;
+    const method = editingId ? 'PUT' : 'POST';
+
+    $.ajax({
+      url,
+      method,
+      contentType: 'application/json',
+      data: JSON.stringify(guideData),
+      success: () => {
+        showMessage(`Guide ${editingId ? 'updated' : 'created'} successfully`);
+        resetGuideForm();
+        loadGuides();
+      },
+      error: (xhr) => {
+        showMessage(`Failed to ${editingId ? 'update' : 'create'} guide: ${xhr.responseText}`, 'error');
+      }
+    });
+  }
+
+  function resetGuideForm() {
+    $('#guideForm')[0].reset();
+    $('#guideId').val('');
+    $('#guideIcon').val('bx bx-book');
+    $('#guideContent').summernote('reset');
+    $('#guideBtnText').text('Save Guide');
+  }
+
+  // =================== VIDEO MANAGEMENT FUNCTIONS ===================
+  let allVideoCategories = [];
+  let allVideos = {};
+
+  // Video Category Functions
+  function loadVideoCategories() {
+    $.get(`${API_BASE}/video-categories`)
+      .done(data => {
+        allVideoCategories = data;
+        updateVideoCategorySelects();
+        updateVideoCategoryTable();
+      })
+      .fail(() => {
+        showMessage('Failed to load video categories', 'error');
+      });
+  }
+
+  function updateVideoCategorySelects() {
+    const selects = $('#videoCategorySelect, #videoFilterCategory');
+    selects.each(function() {
+      const currentVal = $(this).val();
+      $(this).empty();
+      
+      if (this.id === 'videoFilterCategory') {
+        $(this).append('<option value="">All Categories</option>');
+      } else {
+        $(this).append('<option value="">Choose category...</option>');
+      }
+      
+      allVideoCategories.forEach(cat => {
+        $(this).append(`<option value="${cat._id}">${cat.name}</option>`);
+      });
+      
+      $(this).val(currentVal);
+    });
+  }
+
+  function updateVideoCategoryTable() {
+    const tbody = $('#videoCategoryTable');
+    
+    if (allVideoCategories.length === 0) {
+      tbody.html(`
+        <tr>
+          <td colspan="6" class="text-center py-4">
+            <i class="bx bx-video" style="font-size: 2rem; opacity: 0.5;"></i>
+            <p class="mt-2 mb-0">No video categories found</p>
+          </td>
+        </tr>
+      `);
+      return;
+    }
+
+    tbody.html(allVideoCategories.map(category => {
+      const videosInCategory = allVideos[category.name] || [];
+      const videoCount = videosInCategory.length;
+      const createdDate = new Date(category.createdAt).toLocaleDateString();
+      const iconClass = category.iconClass || 'bx bx-play-circle';
+      
+      return `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="${iconClass} me-2 text-primary"></i>
+              ${category.name}
+            </div>
+          </td>
+          <td><i class="${iconClass}"></i></td>
+          <td><span class="badge bg-info">${category.order || 0}</span></td>
+          <td><span class="badge bg-success">${videoCount}</span></td>
+          <td>${createdDate}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editVideoCategory('${category._id}')">
+              <i class="bx bx-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteVideoCategory('${category._id}', '${category.name}')">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join(''));
+  }
+
+  function editVideoCategory(id) {
+    const category = allVideoCategories.find(c => c._id === id);
+    if (category) {
+      $('#videoCatName').val(category.name);
+      $('#videoCatOrder').val(category.order || 0);
+      $('#videoCatIcon').val(category.iconClass || 'bx bx-play-circle');
+      $('#videoCatId').val(id);
+      $('#videoCatBtnText').text('Update Category');
+      
+      // Scroll to form
+      $('html, body').animate({
+        scrollTop: $('#videoCategoryForm').offset().top - 100
+      }, 500);
+    }
+  }
+
+  function deleteVideoCategory(id, name) {
+    if (confirm(`Are you sure you want to delete "${name}" and all its videos?`)) {
+      $.ajax({
+        url: `${API_BASE}/video-categories/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage(`Video category "${name}" deleted successfully`);
+          loadVideoCategories();
+          loadVideos();
+        },
+        error: () => showMessage(`Failed to delete video category "${name}"`, 'error')
+      });
+    }
+  }
+
+  function handleVideoCategorySubmit(e) {
+    e.preventDefault();
+    const editingId = $('#videoCatId').val();
+    const categoryData = {
+      name: $('#videoCatName').val(),
+      order: parseInt($('#videoCatOrder').val()) || 0,
+      iconClass: $('#videoCatIcon').val() || 'bx bx-play-circle'
+    };
+
+    const url = editingId ? `${API_BASE}/video-categories/${editingId}` : `${API_BASE}/video-categories`;
+    const method = editingId ? 'PATCH' : 'POST';
+
+    $.ajax({
+      url,
+      method,
+      contentType: 'application/json',
+      data: JSON.stringify(categoryData),
+      success: () => {
+        showMessage(`Video category ${editingId ? 'updated' : 'created'} successfully`);
+        resetVideoCategoryForm();
+        loadVideoCategories();
+      },
+      error: (xhr) => {
+        showMessage(`Failed to ${editingId ? 'update' : 'create'} video category: ${xhr.responseText}`, 'error');
+      }
+    });
+  }
+
+  function resetVideoCategoryForm() {
+    $('#videoCategoryForm')[0].reset();
+    $('#videoCatId').val('');
+    $('#videoCatIcon').val('bx bx-play-circle');
+    $('#videoCatBtnText').text('Save Category');
+  }
+
+  // Video Functions
+  function loadVideos() {
+    $('#videoListContainer').html(`
+      <div class="text-center py-4">
+        <div class="loading-spinner"></div>
+        <p class="mt-3 mb-0">Loading videos...</p>
+      </div>
+    `);
+
+    $.get(`${API_BASE}/videos`)
+      .done(data => {
+        allVideos = data;
+        updateVideoCategoryTable(); // Update category table with video counts
+        filterAndDisplayVideos();
+      })
+      .fail(() => {
+        showMessage('Failed to load videos', 'error');
+        $('#videoListContainer').html(`
+          <div class="text-center py-4 text-danger">
+            <i class="bx bx-error-circle me-2"></i>Failed to load videos
+          </div>
+        `);
+      });
+  }
+
+  function filterAndDisplayVideos() {
+    const categoryFilter = $('#videoFilterCategory').val();
+    const searchTerm = $('#videoSearch').val().toLowerCase();
+    
+    let filteredVideos = [];
+    
+    // Find the category name from the filter
+    const selectedCategory = allVideoCategories.find(cat => cat._id === categoryFilter);
+    
+    if (categoryFilter && selectedCategory) {
+      // Filter by specific category
+      const categoryVideos = allVideos[selectedCategory.name] || [];
+      filteredVideos = categoryVideos.map(video => ({
+        ...video,
+        categoryName: selectedCategory.name,
+        categoryId: selectedCategory._id
+      }));
+    } else {
+      // Get all videos from all categories
+      Object.entries(allVideos).forEach(([categoryName, videos]) => {
+        const category = allVideoCategories.find(cat => cat.name === categoryName);
+        videos.forEach(video => {
+          filteredVideos.push({
+            ...video,
+            categoryName: categoryName,
+            categoryId: category ? category._id : null
+          });
+        });
+      });
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+      filteredVideos = filteredVideos.filter(video => 
+        video.title.toLowerCase().includes(searchTerm) ||
+        (video.description && video.description.toLowerCase().includes(searchTerm)) ||
+        video.categoryName.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    const container = $('#videoListContainer');
+    
+    if (filteredVideos.length === 0) {
+      container.html(`
+        <div class="text-center py-5">
+          <i class="bx bx-search-alt" style="font-size: 3rem; opacity: 0.5;"></i>
+          <h5 class="mt-3">No videos found</h5>
+          <p class="text-muted">Try adjusting your filters or search terms.</p>
+        </div>
+      `);
+      return;
+    }
+
+    // Group videos by category for display
+    const groupedVideos = {};
+    filteredVideos.forEach(video => {
+      if (!groupedVideos[video.categoryName]) {
+        groupedVideos[video.categoryName] = [];
+      }
+      groupedVideos[video.categoryName].push(video);
+    });
+
+    let html = '';
+    Object.entries(groupedVideos).forEach(([categoryName, videos]) => {
+      const category = allVideoCategories.find(cat => cat.name === categoryName);
+      const categoryIcon = category ? category.iconClass : 'bx bx-play-circle';
+      
+      html += `
+        <div class="mb-4">
+          <h5 class="mb-3 d-flex align-items-center">
+            <i class="${categoryIcon} me-2 text-primary"></i>
+            ${categoryName}
+            <span class="badge bg-primary ms-2">${videos.length}</span>
+          </h5>
+          <div class="row g-3">
+      `;
+      
+      videos.forEach(video => {
+        const thumbnailUrl = `https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`;
+        
+        html += `
+          <div class="col-md-6 col-lg-4">
+            <div class="admin-card p-3" style="height: 100%;">
+              <div class="position-relative mb-3">
+                <img src="${thumbnailUrl}" class="img-fluid rounded" alt="${video.title}" style="width: 100%; height: 140px; object-fit: cover;">
+                <div class="position-absolute top-50 start-50 translate-middle">
+                  <div class="btn btn-primary btn-sm rounded-circle">
+                    <i class="bx bx-play"></i>
+                  </div>
+                </div>
+              </div>
+              <h6 class="fw-bold text-truncate" title="${video.title}">${video.title}</h6>
+              <p class="text-muted small mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                ${video.description || 'No description available'}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">Order: ${video.order || 0}</small>
+                <div>
+                  <button class="btn btn-sm btn-info me-1" onclick="previewVideoById('${video.youtubeId}', '${video.title}')">
+                    <i class="bx bx-play"></i>
+                  </button>
+                  <button class="btn btn-sm btn-warning me-1" onclick="editVideo('${video._id}')">
+                    <i class="bx bx-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteVideo('${video._id}', '${video.title.replace(/'/g, "\\'")}')">
+                    <i class="bx bx-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += `
+          </div>
+        </div>
+      `;
+    });
+
+    container.html(html);
+  }
+
+  function editVideo(id) {
+    // Find the video in all categories
+    let foundVideo = null;
+    let foundCategoryId = null;
+    
+    Object.entries(allVideos).forEach(([categoryName, videos]) => {
+      const video = videos.find(v => v._id === id);
+      if (video) {
+        foundVideo = video;
+        const category = allVideoCategories.find(cat => cat.name === categoryName);
+        foundCategoryId = category ? category._id : null;
+      }
+    });
+
+    if (foundVideo && foundCategoryId) {
+      $('#videoId').val(id);
+      $('#videoCategorySelect').val(foundCategoryId);
+      $('#videoTitle').val(foundVideo.title);
+      $('#youtubeId').val(foundVideo.youtubeId);
+      $('#videoDescription').val(foundVideo.description || '');
+      $('#videoOrder').val(foundVideo.order || 1);
+      $('#videoBtnText').text('Update Video');
+      
+      // Show preview button
+      $('#previewBtn').show();
+      
+      // Scroll to form
+      $('html, body').animate({
+        scrollTop: $('#videoForm').offset().top - 100
+      }, 500);
+      
+      showMessage('Video loaded for editing', 'success');
+    } else {
+      showMessage('Failed to load video details', 'error');
+    }
+  }
+
+  function deleteVideo(id, title) {
+    if (confirm(`Are you sure you want to delete this video?\n\n"${title}"`)) {
+      $.ajax({
+        url: `${API_BASE}/videos/${id}`,
+        type: 'DELETE',
+        success: () => {
+          showMessage('Video deleted successfully');
+          loadVideos();
+        },
+        error: () => showMessage('Failed to delete video', 'error')
+      });
+    }
+  }
+
+  function handleVideoSubmit(e) {
+    e.preventDefault();
+    const editingId = $('#videoId').val();
+    const categoryId = $('#videoCategorySelect').val();
+    
+    const videoData = {
+      title: $('#videoTitle').val(),
+      youtubeId: $('#youtubeId').val(),
+      description: $('#videoDescription').val(),
+      order: parseInt($('#videoOrder').val()) || 1,
+      categoryId: categoryId
+    };
+
+    const url = editingId ? `${API_BASE}/videos/${editingId}` : `${API_BASE}/videos`;
+    const method = editingId ? 'PATCH' : 'POST';
+
+    $.ajax({
+      url,
+      method,
+      contentType: 'application/json',
+      data: JSON.stringify(videoData),
+      success: () => {
+        showMessage(`Video ${editingId ? 'updated' : 'created'} successfully`);
+        resetVideoForm();
+        loadVideos();
+      },
+      error: (xhr) => {
+        showMessage(`Failed to ${editingId ? 'update' : 'create'} video: ${xhr.responseText}`, 'error');
+      }
+    });
+  }
+
+  function resetVideoForm() {
+    $('#videoForm')[0].reset();
+    $('#videoId').val('');
+    $('#videoOrder').val('1');
+    $('#videoBtnText').text('Save Video');
+    $('#previewBtn').hide();
+  }
+
+  function previewVideo() {
+    const youtubeId = $('#youtubeId').val();
+    const title = $('#videoTitle').val() || 'Preview Video';
+    
+    if (youtubeId) {
+      previewVideoById(youtubeId, title);
+    } else {
+      showMessage('Please enter a YouTube video ID first', 'error');
+    }
+  }
+
+  function previewVideoById(youtubeId, title) {
+    const url = `/video/player?id=${youtubeId}&title=${encodeURIComponent(title)}`;
+    window.open(url, '_blank');
+  }
+</script>
+</body>
+</html>

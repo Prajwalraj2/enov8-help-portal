@@ -1,0 +1,346 @@
+<nav class="navbar navbar-expand-lg fixed-top modern-header">
+    <div class="container-fluid px-4">
+      <!-- Brand Section -->
+      <div class="navbar-brand-container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+          <div class="brand-logo me-3">
+            <img src="/images/enov8_logo-removebg-preview.png" alt="Enov8 Logo" class="logo-image" />
+          </div>
+          <div class="brand-text">
+            <div class="brand-name">Enov8 Help Portal</div>
+          </div>
+        </a>
+      </div>
+  
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bx bx-menu"></i>
+      </button>
+  
+      <!-- Navigation Menu -->
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link modern-nav-link" href="/">
+              <i class="bx bx-home-alt nav-icon"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link modern-nav-link active" href="/faq">
+              <i class="bx bx-help-circle nav-icon"></i>
+              <span>FAQ</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link modern-nav-link" href="/guide">
+              <i class="bx bx-book nav-icon"></i>
+              <span>Guide</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link modern-nav-link" href="/video">
+              <i class="bx bx-video nav-icon"></i>
+              <span>Videos</span>
+            </a>
+          </li>
+        </ul>
+  
+        <!-- Additional Actions -->
+        <div class="navbar-actions ms-3 d-flex align-items-center">
+          <!-- <button class="btn btn-outline-light btn-sm search-toggle me-2" type="button" title="Quick Search">
+            <i class="bx bx-search"></i>
+          </button> -->
+          <div class="theme-indicator" title="Toggle Light/Dark Mode" style="cursor: pointer;">
+            <i class="bx bx-moon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Modern Header Styles with CSS Variables -->
+  <style>
+  :root {
+    --header-height: 80px;
+  }
+  
+  .modern-header {
+    background: linear-gradient(135deg, var(--sidebar-color) 0%, var(--primary-color-light) 100%) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    height: var(--header-height);
+    padding: 0;
+  }
+  
+  .navbar-brand-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-brand {
+    text-decoration: none;
+    color: var(--text-color) !important;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-color-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(1.1);
+  }
+  
+  .brand-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .brand-text {
+    line-height: 1.2;
+  }
+  
+  .brand-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-color);
+  }
+  
+  .navbar-toggler {
+    color: var(--text-color);
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  .modern-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px !important;
+    margin: 0 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    color: var(--text-color) !important;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+  }
+  
+  .modern-nav-link:hover {
+    background-color: var(--primary-color-light);
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+  }
+  
+  .modern-nav-link.active {
+    background: linear-gradient(135deg, rgba(36, 106, 40, 0.2) 0%, rgba(45, 122, 48, 0.2) 100%);
+    color: #4ade80 !important;
+    border: 1px solid rgba(36, 106, 40, 0.3);
+  }
+
+
+
+/* Light theme active link styles */
+body:not(.dark-theme) .modern-nav-link.active {
+  background: linear-gradient(135deg, rgba(36, 106, 40, 0.08) 0%, rgba(45, 122, 48, 0.12) 100%);
+  color: var(--primary-color) !important;
+  border: 1px solid rgba(36, 106, 40, 0.15);
+  /* box-shadow: 0 2px 8px rgba(36, 106, 40, 0.1); */
+  font-weight: 600;
+}
+
+/* body:not(.dark-theme) .modern-nav-link.active::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), #4ade80);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(36, 106, 40, 0.2);
+} */
+
+/* body:not(.dark-theme) .modern-nav-link.active .nav-icon {
+  color: var(--primary-color);
+  transform: scale(1.1);
+} */
+
+/* Hover effect for active link in light theme */
+body:not(.dark-theme) .modern-nav-link.active:hover {
+  background: linear-gradient(135deg, rgba(36, 106, 40, 0.12) 0%, rgba(45, 122, 48, 0.16) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(36, 106, 40, 0.15);
+}
+
+    
+  
+  .nav-icon {
+    font-size: 18px;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .modern-nav-link:hover .nav-icon {
+    transform: scale(1.1);
+  }
+  
+  .navbar-actions {
+    gap: 8px;
+  }
+  
+  .search-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--primary-color-light);
+    transition: all 0.3s ease;
+  }
+  
+  .search-toggle:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+  
+  .theme-indicator {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color-light);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 991px) {
+    .modern-header {
+      height: auto;
+      padding: 16px 0;
+    }
+  
+    .brand-name {
+      font-size: 18px;
+    }
+  
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+    }
+  
+    .modern-nav-link {
+      margin: 4px 0;
+      border-radius: 8px;
+    }
+  
+    .navbar-actions {
+      margin-top: 16px;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .brand-name {
+      font-size: 16px;
+    }
+  
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+    }
+  }
+  
+  /* Animation */
+  @keyframes slideInDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .modern-header {
+    animation: slideInDown 0.5s ease-out;
+  }
+  
+  /* Hover effect */
+  .modern-header:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Active link underline */
+  .modern-nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(90deg, #246a28, #4ade80);
+    border-radius: 2px;
+  }
+  </style>
+  
+  <!-- JavaScript: highlight active page -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.modern-nav-link');
+  
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (
+        link.getAttribute('href') === currentPath ||
+        (currentPath.includes(link.getAttribute('href')) && link.getAttribute('href') !== '/')
+      ) {
+        link.classList.add('active');
+      }
+    });
+  
+    const searchToggle = document.querySelector('.search-toggle');
+    if (searchToggle) {
+      searchToggle.addEventListener('click', function () {
+        const searchBar = document.querySelector('.search-bar');
+        if (searchBar) {
+          searchBar.focus();
+          searchBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    }
+  });
+  </script>
+  

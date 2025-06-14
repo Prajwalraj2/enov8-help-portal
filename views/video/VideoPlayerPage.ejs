@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Player - Enov8</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/faq.css" />
+
+  <!-- Box Icons CDN for icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <link rel="stylesheet" href="/css/theme.css">
+  
+  <link rel="icon" type="image/png" href="/favicon-32x32.png">
+
+  <style>
+    /* Video Player Specific Styles extending the FAQ theme */
+    .video-player-container {
+      background-color: var(--sidebar-color);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      margin-bottom: 32px;
+    }
+
+    .video-embed-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-embed-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;    
+      border: none;
+    }
+
+    .video-info-section {
+      padding: 24px;
+      background-color: var(--sidebar-color);
+    }
+
+    .video-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .video-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category-badge {
+      background: linear-gradient(135deg, var(--primary-color), #2d7a32);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+
+    .video-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--text-color);
+      opacity: 0.7;
+      font-size: 0.875rem;
+    }
+
+    .video-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .video-description {
+      color: var(--text-color);
+      line-height: 1.6;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Recommended Videos Section */
+    .recommendations-section {
+      background-color: var(--sidebar-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--primary-color);
+      font-size: 1.4rem;
+    }
+
+    .recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .recommended-card {
+      background-color: var(--primary-color-light);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: var(--tran-04);
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .recommended-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-color);
+    }
+
+    .recommended-thumbnail {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+    }
+
+    .recommended-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--tran-04);
+    }
+
+    .recommended-card:hover .recommended-thumbnail img {
+      transform: scale(1.05);
+    }
+
+    .play-overlay-small {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: rgba(36, 106, 40, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--tran-03);
+      backdrop-filter: blur(10px);
+    }
+
+    .play-overlay-small i {
+      color: white;
+      font-size: 16px;
+      margin-left: 2px;
+    }
+
+    .recommended-card:hover .play-overlay-small {
+      background: var(--primary-color);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .recommended-info {
+      padding: 16px;
+    }
+
+    .recommended-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-color);
+      line-height: 1.4;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Loading States */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+      background-color: var(--sidebar-color);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-color);
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Navigation Buttons */
+    .video-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .nav-btn {
+      background-color: var(--sidebar-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--tran-03);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .nav-btn i {
+      font-size: 16px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .video-info-section {
+        padding: 20px;
+      }
+
+      .video-title {
+        font-size: 1.25rem;
+      }
+
+      .video-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .video-stats {
+        gap: 16px;
+      }
+
+      .recommended-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .nav-btn {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .recommendations-section {
+        padding: 16px;
+      }
+
+      .video-title {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Error State */
+    .error-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-color);
+      background-color: var(--sidebar-color);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .error-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <!-- Include shared navbar -->
+  <%- include('../partials/header') %>
+
+  <div class="home" style="left: 0; width: 100%; padding: 32px;">
+    <div class="container-fluid">
+      <!-- Navigation -->
+      <div class="video-nav">
+        <a href="/video" class="nav-btn">
+          <i class="bx bx-arrow-back"></i>
+          Back to Videos
+        </a>
+        <div class="d-flex gap-2">
+          <button class="nav-btn" onclick="toggleFullscreen()">
+            <i class="bx bx-fullscreen"></i>
+            Fullscreen
+          </button>
+        </div>
+      </div>
+
+      <!-- Video Player Section -->
+      <div class="video-player-container">
+        <div class="video-embed-wrapper">
+          <iframe id="videoFrame" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="video-info-section">
+          <h1 class="video-title" id="videoTitle">
+            <i class="bx bx-play-circle me-2 text-primary"></i>
+            Loading video...
+          </h1>
+          <div class="video-meta">
+            <div class="category-badge" id="categoryBadge" style="display: none;">
+              <i class="bx bx-category-alt"></i>
+              <span></span>
+            </div>
+            <div class="video-stats">
+              <div class="video-stat-item">
+                <i class="bx bx-time"></i>
+                <span>Tutorial</span>
+              </div>
+              <div class="video-stat-item">
+                <i class="bx bx-play"></i>
+                <span>HD Quality</span>
+              </div>
+            </div>
+          </div>
+          <div class="video-description" id="videoDescription">
+            Learn step by step with this comprehensive video tutorial designed to help you master the concepts effectively.
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommended Videos Section -->
+      <div class="recommendations-section">
+        <h2 class="section-title">
+          <i class="bx bx-list-ul"></i>
+          Recommended Videos
+        </h2>
+        <div id="recommendationsContainer">
+          <!-- Loading state -->
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p class="text-muted">Loading recommended videos...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const API_BASE = '/api';
+    const params = new URLSearchParams(window.location.search);
+    const currentId = params.get("id");
+    const currentTitle = decodeURIComponent(params.get("title") || "Untitled Video");
+
+    const frame = document.getElementById("videoFrame");
+    const titleEl = document.getElementById("videoTitle");
+    const categoryEl = document.getElementById("categoryBadge");
+    const recContainer = document.getElementById("recommendationsContainer");
+    const descriptionEl = document.getElementById("videoDescription");
+
+    // Initialize video player
+    function initializePlayer() {
+      if (currentId) {
+        frame.src = `https://www.youtube.com/embed/${currentId}?rel=0&modestbranding=1&showinfo=0`;
+        titleEl.innerHTML = `
+          <i class="bx bx-play-circle me-2 text-primary"></i>
+          ${currentTitle}
+        `;
+        document.title = `${currentTitle} - Enov8 Videos`;
+      } else {
+        showError();
+      }
+    }
+
+    // Load recommended videos and current video details
+    async function loadRecommendations() {
+      try {
+        const res = await fetch(`${API_BASE}/videos`);
+        if (!res.ok) throw new Error('Failed to fetch videos');
+        
+        const data = await res.json();
+        let foundCategory = null;
+        let sameCategoryVideos = [];
+        let currentVideo = null;
+
+        // Find current video's category and details
+        for (const [cat, videos] of Object.entries(data)) {
+          const match = videos.find(v => v.youtubeId === currentId);
+          if (match) {
+            foundCategory = cat;
+            currentVideo = match;
+            sameCategoryVideos = videos.filter(v => v.youtubeId !== currentId).slice(0, 6); // Limit to 6 recommendations
+            break;
+          }
+        }
+
+        // Update video description
+        if (currentVideo && currentVideo.description) {
+          descriptionEl.textContent = currentVideo.description;
+        } else {
+          descriptionEl.textContent = 'Learn step by step with this comprehensive video tutorial designed to help you master the concepts effectively.';
+        }
+
+        // Show category badge
+        if (foundCategory) {
+          categoryEl.querySelector('span').textContent = foundCategory;
+          categoryEl.style.display = 'inline-flex';
+        }
+
+        // Render recommendations
+        if (sameCategoryVideos.length > 0) {
+          renderRecommendations(sameCategoryVideos, foundCategory);
+        } else {
+          showNoRecommendations();
+        }
+
+      } catch (error) {
+        console.error("Failed to load recommendations:", error);
+        showRecommendationError();
+      }
+    }
+
+    function renderRecommendations(videos, category) {
+      const grid = document.createElement('div');
+      grid.className = 'recommended-grid';
+
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'recommended-card';
+        card.onclick = () => changeVideo(video.youtubeId, video.title);
+        
+        card.innerHTML = `
+          <div class="recommended-thumbnail">
+            <img src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg" 
+                 alt="${video.title}" loading="lazy">
+            <div class="play-overlay-small">
+              <i class="bx bx-play"></i>
+            </div>
+          </div>
+          <div class="recommended-info">
+            <p class="recommended-title">${video.title}</p>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+
+      recContainer.innerHTML = '';
+      recContainer.appendChild(grid);
+    }
+
+    function showNoRecommendations() {
+      recContainer.innerHTML = `
+        <div class="error-state">
+          <i class="bx bx-video text-muted"></i>
+          <h5>No Related Videos</h5>
+          <p class="text-muted">There are no related videos available at the moment.</p>
+          <a href="/videos" class="nav-btn mt-3">
+            <i class="bx bx-arrow-back me-2"></i>Browse All Videos
+          </a>
+        </div>
+      `;
+    }
+
+    function showRecommendationError() {
+      recContainer.innerHTML = `
+        <div class="error-state">
+          <i class="bx bx-error-circle"></i>
+          <h5>Failed to Load Recommendations</h5>
+          <p class="text-muted">Please check your connection and try again.</p>
+          <button class="nav-btn mt-3" onclick="loadRecommendations()">
+            <i class="bx bx-refresh me-2"></i>Retry
+          </button>
+        </div>
+      `;
+    }
+
+    function showError() {
+      titleEl.innerHTML = `
+        <i class="bx bx-error-circle me-2 text-danger"></i>
+        Video Not Found
+      `;
+      frame.style.display = 'none';
+      descriptionEl.innerHTML = `
+        <div class="error-state">
+          <i class="bx bx-video-off"></i>
+          <h5>Video Not Available</h5>
+          <p>The requested video could not be loaded. Please check the URL or try again later.</p>
+          <a href="/videos" class="nav-btn mt-3">
+            <i class="bx bx-arrow-back me-2"></i>Back to Videos
+          </a>
+        </div>
+      `;
+    }
+
+    function changeVideo(id, title) {
+      const encodedTitle = encodeURIComponent(title);
+      
+      // Update URL
+      const newUrl = `/video/player?id=${id}&title=${encodedTitle}`;
+      history.pushState({}, "", newUrl);
+      
+      // Update player
+      frame.src = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&showinfo=0`;
+      titleEl.innerHTML = `
+        <i class="bx bx-play-circle me-2 text-primary"></i>
+        ${title}
+      `;
+      document.title = `${title} - Enov8 Videos`;
+      
+      // Reset description to loading state
+      descriptionEl.textContent = 'Loading video details...';
+      
+      // Reset and reload recommendations
+      categoryEl.style.display = 'none';
+      recContainer.innerHTML = `
+        <div class="loading-container">
+          <div class="loading-spinner"></div>
+          <p class="text-muted">Loading recommendations...</p>
+        </div>
+      `;
+      
+      // Update current video info
+      window.currentId = id;
+      window.currentTitle = title;
+      
+      // Reload recommendations for new video (this will also update the description)
+      setTimeout(() => {
+        loadRecommendations();
+      }, 500);
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleFullscreen() {
+      if (frame.requestFullscreen) {
+        frame.requestFullscreen();
+      } else if (frame.webkitRequestFullscreen) {
+        frame.webkitRequestFullscreen();
+      } else if (frame.msRequestFullscreen) {
+        frame.msRequestFullscreen();
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initializePlayer();
+      loadRecommendations();
+    });
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+      location.reload();
+    });
+  </script>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

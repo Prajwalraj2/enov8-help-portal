@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enov8 Guide Details</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Box Icons CDN for icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="icon" type="image/x-icon" href="/favicon-32x32.png">
+  <style>
+    /* Google Fonts Import - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* ===== Colors ===== */
+      --body-color: #f8f9fa;
+      --sidebar-color: #ffffff;
+      --primary-color: #246a28;
+      --primary-color-light: #f6f8fa;
+      --toggle-color: #e9ecef;
+      --text-color: #495057;
+      --border-color: #dee2e6;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+      /* ====== Transition ====== */
+      --tran-03: all 0.2s ease;
+      --tran-04: all 0.3s ease;   
+      --tran-05: all 0.3s ease;
+    }
+
+    body {
+      background-color: var(--body-color);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      padding-top: 80px;
+      min-height: 100vh;
+      transition: var(--tran-05);
+    }
+
+    ::selection {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    body.dark {
+      --body-color: #0d1117;
+      --sidebar-color: #161b22;
+      --primary-color: #238636;
+      --primary-color-light: #21262d;
+      --toggle-color: #30363d;
+      --text-color: #e6edf3;
+      --border-color: #30363d;
+    }
+
+    /* ===== Main Container ===== */
+    .guide-container {
+      display: flex;
+      height: calc(100vh - 80px);
+      position: relative;
+    }
+
+         /* ===== Sidebar ===== */
+     .guide-sidebar {
+       position: fixed;
+       top: 80px;
+       left: 0;
+       height: calc(100vh - 80px);
+       width: 320px;
+       padding: 20px 16px;
+       background: var(--sidebar-color);
+       transition: var(--tran-05);
+       z-index: 100;
+       border-radius: 0 16px 16px 0;
+       box-shadow: var(--shadow-lg);
+       border-right: 1px solid var(--border-color);
+     }
+
+     .guide-sidebar.close {
+       width: 88px;
+     }
+
+         /* ===== Toggle Button ===== */
+     .sidebar-header {
+       position: relative;
+       margin-bottom: 20px;
+     }
+
+     .sidebar-title {
+       font-size: 1.2rem;
+       font-weight: 600;
+       color: var(--text-color);
+       margin: 0;
+       transition: var(--tran-03);
+     }
+
+     .guide-sidebar.close .sidebar-title {
+       opacity: 0;
+       visibility: hidden;
+     }
+
+     .sidebar-header .sidebar-toggle {
+       position: absolute;
+       top: 10px;
+       right: -30px;
+       transform: translateY(-50%) rotate(180deg);
+       height: 32px;
+       width: 32px;
+       background-color: var(--primary-color);
+       color: white;
+       border-radius: 50%;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 18px;
+       cursor: pointer;
+       transition: var(--tran-05);
+       box-shadow: var(--shadow);
+       border: 2px solid var(--sidebar-color);
+     }
+
+     .sidebar-header .sidebar-toggle:hover {
+       background-color: var(--primary-color);
+       transform: translateY(-50%) rotate(180deg) scale(1.1);
+     }
+
+     body.dark .sidebar-header .sidebar-toggle {
+       color: var(--text-color);
+     }
+
+     .guide-sidebar.close .sidebar-toggle {
+       transform: translateY(-50%) rotate(0deg);
+     }
+
+     .guide-sidebar.close .sidebar-toggle:hover {
+       transform: translateY(-50%) rotate(0deg) scale(1.1);
+     }
+
+    /* ===== Category Sections ===== */
+    .category-section {
+      margin-bottom: 32px;
+    }
+
+    .category-heading {
+       font-size: 1.1rem;
+       font-weight: 600;
+       color: var(--primary-color);
+       margin-bottom: 12px;
+       padding: 2px 3px;
+       transition: var(--tran-03);
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+     }
+
+     .guide-sidebar.close .category-heading {
+       opacity: 0;
+       visibility: hidden;
+     }
+
+    /* ===== Guide Items ===== */
+    .guide-item {
+      margin-bottom: 8px;
+    }
+
+    .guide-button {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 7px 10px;
+      background-color: transparent;
+      color: var(--text-color);
+      border: 1px solid transparent;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: var(--tran-03);
+      font-weight: 400;
+      font-size: 0.85rem;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* .guide-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .guide-button:hover::before {
+      left: 100%;
+    }
+
+    .guide-button:hover {
+      transform: translateX(8px);
+      background-color: var(--primary-color);
+      color: var(--sidebar-color);
+      border-color: var(--primary-color);
+    } */
+
+    .guide-button:hover {
+      background-color: var(--primary-color-light);
+      /* border-color: var(--primary-color); */
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    .guide-button:hover .guide-icon {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 6px;
+    }
+
+    .guide-button.active {
+      background-color: var(--primary-color-light);
+      color: var(--text-color);
+      /* border-color: var(--primary-color); */
+      font-weight: 500;
+      border-radius: 6px;
+    }
+
+    .guide-button.active .guide-icon {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 6px;
+    }
+
+    .guide-button.active .guide-text {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    
+
+    .guide-button .guide-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: var(--tran-03);
+    }
+
+    .guide-button .guide-icon {
+      min-width: 40px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border-radius: 12px;
+      transition: var(--tran-03);
+      margin-right: 12px;
+      color: var(--text-color);
+    }
+
+    .guide-sidebar.close .guide-text {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .guide-sidebar.close .guide-icon {
+      margin-right: 0 !important;
+    }
+
+    .guide-sidebar.close .guide-button {
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .guide-sidebar.close .guide-button.active,
+    .guide-sidebar.close .guide-button:hover {
+      background-color: transparent;
+    }
+
+    /* ===== Main Content ===== */
+    .guide-content {
+      margin-left: 320px;
+      width: calc(100% - 320px);
+      padding: 32px;
+      transition: var(--tran-05);
+      min-height: calc(100vh - 80px);
+      background-color: var(--body-color);
+    }
+
+    .guide-sidebar.close ~ .guide-content {
+      margin-left: 88px;
+      width: calc(100% - 88px);
+    }
+
+    .content-card {
+      background-color: var(--sidebar-color);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      min-height: 500px;
+    }
+
+    .guide-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .guide-html-content {
+      line-height: 1.7;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .guide-html-content h1,
+    .guide-html-content h2,
+    .guide-html-content h3,
+    .guide-html-content h4,
+    .guide-html-content h5,
+    .guide-html-content h6 {
+      color: var(--text-color);
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .guide-html-content h1 { font-size: 1.8rem; }
+    .guide-html-content h2 { font-size: 1.5rem; }
+    .guide-html-content h3 { font-size: 1.3rem; }
+
+    .guide-html-content p {
+      margin-bottom: 16px;
+    }
+
+    .guide-html-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 16px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .guide-html-content code {
+      background-color: var(--primary-color-light);
+      color: var(--primary-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .guide-html-content pre {
+      background-color: var(--primary-color-light);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    /* ===== Loading States ===== */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-color);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #dc3545;
+    }
+
+    .error-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+
+    .retry-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: var(--tran-03);
+    }
+
+    .retry-btn:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Responsive Design ===== */
+         @media (max-width: 1024px) {
+       .guide-sidebar {
+         left: -320px;
+         border-radius: 0 16px 16px 0;
+       }
+       
+       .guide-sidebar.open {
+         left: 0;
+       }
+       
+       .guide-content {
+         margin-left: 0;
+         width: 100%;
+         padding: 20px;
+       }
+       
+       .guide-sidebar.close ~ .guide-content {
+         margin-left: 0;
+         width: 100%;
+       }
+     }
+
+         @media (max-width: 768px) {
+       .guide-sidebar {
+         width: 100%;
+         left: -100%;
+         border-radius: 0;
+       }
+       
+       .guide-sidebar.open {
+         left: 0;
+       }
+
+       .sidebar-header .sidebar-toggle {
+         right: 20px;
+       }
+       
+       .guide-content {
+         padding: 16px;
+       }
+       
+       .content-card {
+         padding: 20px;
+       }
+       
+       .guide-title {
+         font-size: 1.5rem;
+       }
+     }
+
+    @media (max-width: 480px) {
+      .content-card {
+        padding: 16px;
+      }
+      
+      .guide-title {
+        font-size: 1.3rem;
+      }
+      
+      .guide-html-content {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* ===== Sidebar Content ===== */
+    .sidebar-menu {
+      height: calc(100% - 60px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Hide scrollbar completely */
+    .sidebar-menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sidebar-menu {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <div class="guide-container">
+    <!-- Sidebar -->
+    <nav class="guide-sidebar" id="guideSidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">
+          <i class="bx bx-book-open me-2"></i>
+          Guide Categories
+        </h2>
+        <i class='bx bx-chevron-right sidebar-toggle' id="sidebarToggle"></i>
+      </div>
+      
+      <div class="sidebar-menu">
+        <div id="sidebarContent">
+          <!-- Loading State -->
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <h6>Loading Categories...</h6>
+            <p class="text-muted small">Please wait while we fetch the guides.</p>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="guide-content">
+      <div class="content-card">
+        <div id="contentArea">
+          <!-- Default State -->
+          <div class="empty-state">
+            <i class="bx bx-book-reader text-muted"></i>
+            <h4>Select a Guide</h4>
+            <p class="text-muted">Choose a guide from the sidebar to start reading comprehensive instructions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    const API_BASE = "/api";
+    const sidebar = document.getElementById("guideSidebar");
+    const sidebarContent = document.getElementById("sidebarContent");
+    const contentArea = document.getElementById("contentArea");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+
+    // Sidebar toggle functionality
+    sidebarToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("close");
+      saveSidebarState();
+    });
+
+    // Mobile responsive functionality
+    function checkScreenSize() {
+      if (window.innerWidth <= 1024) {
+        sidebar.classList.add("close");
+        
+        // Add mobile toggle functionality
+        sidebarToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          sidebar.classList.toggle("open");
+        });
+      } else {
+        sidebar.classList.remove("open");
+      }
+    }
+
+    // Check screen size on load and resize
+    window.addEventListener('load', checkScreenSize);
+    window.addEventListener('resize', checkScreenSize);
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+      if (window.innerWidth <= 1024) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isToggleButton = sidebarToggle.contains(event.target);
+        
+        if (!isClickInsideSidebar && !isToggleButton && sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+
+    // Initialize the sidebar state based on localStorage
+    function initializeSidebar() {
+      const sidebarState = localStorage.getItem('guideSidebarState');
+      
+      if (sidebarState === 'closed') {
+        sidebar.classList.add('close');
+      }
+    }
+
+    // Save sidebar state to localStorage
+    function saveSidebarState() {
+      if (sidebar.classList.contains('close')) {
+        localStorage.setItem('guideSidebarState', 'closed');
+      } else {
+        localStorage.setItem('guideSidebarState', 'open');
+      }
+    }
+
+    async function buildSidebar() {
+      try {
+        const categoryRes = await fetch(`${API_BASE}/guide-categories`);
+        if (!categoryRes.ok) throw new Error("Failed to fetch categories");
+        const categories = await categoryRes.json();
+
+        if (!categories || categories.length === 0) {
+          showEmptyCategories();
+          return;
+        }
+
+        let sidebarHTML = '';
+        
+        for (const cat of categories) {
+          const guideRes = await fetch(`${API_BASE}/guides/category/${cat._id}`);
+          if (!guideRes.ok) continue;
+          const guides = await guideRes.json();
+
+          if (guides.length === 0) continue;
+
+                     sidebarHTML += `
+             <div class="category-section ">
+               <div class="category-heading border-bottom">
+                 ${cat.name}
+               </div>
+               <div class="guides-list">
+           `;
+
+          guides.forEach(guide => {
+                         sidebarHTML += `
+               <div class="guide-item">
+                 <button class="guide-button" data-id="${guide._id}" onclick="loadGuide('${guide._id}')">
+                   <div class="guide-icon">
+                     <i class="${guide.iconClass || 'bx bx-book-content'}"></i>
+                   </div>
+                   <span class="guide-text">${guide.guidetitle}</span>
+                 </button>
+               </div>
+             `;
+          });
+
+          sidebarHTML += `
+              </div>
+            </div>
+          `;
+        }
+
+        sidebarContent.innerHTML = sidebarHTML;
+
+      } catch (err) {
+        console.error("Failed to load guide categories:", err);
+        showErrorCategories();
+      }
+    }
+
+    async function loadGuide(id) {
+      try {
+        // Show loading state
+        contentArea.innerHTML = `
+          <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <h5>Loading Guide...</h5>
+            <p class="text-muted">Please wait while we fetch the guide content.</p>
+          </div>
+        `;
+
+        const guideRes = await fetch(`${API_BASE}/guides/view/${id}`);
+        if (!guideRes.ok) throw new Error("Failed to fetch guide");
+        const guide = await guideRes.json();
+
+        let html = `
+          <div class="guide-header mb-4">
+            <h1 class="guide-title">
+              <i class="bx bx-book-content me-3 text-primary"></i>
+              ${guide.guidetitle}
+            </h1>
+          </div>
+          <div class="guide-html-content">${guide.guidecontent}</div>
+        `;
+        
+        contentArea.innerHTML = html;
+
+        // Update active state
+        document.querySelectorAll(".guide-button").forEach(btn => {
+          const isActive = btn.dataset.id === id;
+          btn.classList.toggle("active", isActive);
+          if (isActive) {
+            btn.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+
+        // Update URL
+        const url = new URL(location);
+        url.searchParams.set("guide", id);
+        history.replaceState(null, "", url);
+
+        // Close sidebar on mobile after selection
+        if (window.innerWidth <= 1024) {
+          sidebar.classList.remove('open');
+        }
+
+      } catch (err) {
+        console.error("Failed to load guide:", err);
+        contentArea.innerHTML = `
+          <div class="error-state">
+            <i class="bx bx-error-circle"></i>
+            <h4>Failed to Load Guide</h4>
+            <p>There was an error loading the guide content. Please try again.</p>
+            <button class="retry-btn" onclick="loadGuide('${id}')">
+              <i class="bx bx-refresh me-2"></i>Retry
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function showEmptyCategories() {
+      sidebarContent.innerHTML = `
+        <div class="empty-state">
+          <i class="bx bx-folder-open text-muted"></i>
+          <h6>No Categories Found</h6>
+          <p class="text-muted small">There are no guide categories available.</p>
+        </div>
+      `;
+    }
+
+    function showErrorCategories() {
+      sidebarContent.innerHTML = `
+        <div class="error-state">
+          <i class="bx bx-error-circle"></i>
+          <h6>Failed to Load</h6>
+          <p class="small">Unable to load categories.</p>
+          <button class="retry-btn btn-sm" onclick="buildSidebar()">
+            <i class="bx bx-refresh me-1"></i>Retry
+          </button>
+        </div>
+      `;
+    }
+
+    // Initialize on page load
+    (async function init() {
+      initializeSidebar();
+      await buildSidebar();
+      
+      // Load guide from URL if present
+      const idFromURL = new URLSearchParams(location.search).get("guide");
+      if (idFromURL) {
+        loadGuide(idFromURL);
+      }
+    })();
+  </script>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

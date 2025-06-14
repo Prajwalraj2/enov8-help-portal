@@ -1,0 +1,30 @@
+/* public/css/theme.css */
+
+/* Default (light theme) */
+body.light-theme {
+    --body-color: #f8f9fa;
+    --sidebar-color: #ffffff;
+    --primary-color: #246a28;
+    --primary-color-light: #f6f8fa;
+    --toggle-color: #e9ecef;
+    --text-color: #495057;
+    --border-color: #dee2e6;
+  }
+  
+  /* Dark theme */
+  body.dark-theme {
+    --body-color: #0d1117;
+    --sidebar-color: #161b22;
+    --primary-color: #238636;
+    --primary-color-light: #21262d;
+    --toggle-color: #30363d;
+    --text-color: #e6edf3;
+    --border-color: #30363d;
+  }
+  
+  body {
+    background-color: var(--body-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  

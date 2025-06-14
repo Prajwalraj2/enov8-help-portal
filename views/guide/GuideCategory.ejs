@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enov8 Guide Categories</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Box Icons CDN for icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/theme.css">
+
+  <link rel="icon" type="image/x-icon" href="/favicon-32x32.png">
+
+  <style>
+    /* Google Fonts Import - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      /* Light theme specific variables */
+      --card-color: #ffffff;
+      --guide-button-bg: #f8f9fa;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 12px 20px -5px rgba(0, 0, 0, 0.15);
+
+      /* ====== Transition ====== */
+      --tran-03: all 0.2s ease;
+      --tran-04: all 0.3s ease;   
+      --tran-05: all 0.3s ease;
+    }
+
+    /* Dark theme adjustments */
+    body.dark-theme {
+      --card-color: #21262d;
+      --guide-button-bg: #161b22;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 12px 20px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Enhanced dark theme styling */
+    body.dark-theme .category-card {
+      border: 1px solid #30363d;
+      background-color: var(--card-color);
+    }
+
+    body.dark-theme .category-card:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(35, 134, 54, 0.2);
+    }
+
+    body.dark-theme .guide-button {
+      background-color: var(--guide-button-bg);
+      border: 1px solid #30363d;
+    }
+
+    body.dark-theme .guide-button:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      background-color: var(--body-color);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      padding-top: 80px;
+      min-height: 100vh;
+      transition: var(--tran-05);
+    }
+
+         .page-header {
+       background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a30 100%);
+       box-shadow: var(--shadow-lg);
+     }
+
+         .category-container {
+       max-width: 1200px;
+     }
+
+         .category-card {
+       background-color: var(--card-color);
+       border-radius: 16px;
+       padding: 32px;
+       box-shadow: var(--shadow);
+       border: 1px solid var(--border-color);
+       transition: var(--tran-04);
+       position: relative;
+       overflow: hidden;
+     }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), #4ade80);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+         .category-header {
+       border-bottom: 1px solid var(--border-color);
+     }
+
+     body.dark-theme .category-header {
+      border-bottom-color: #3f3f4a !important;
+     }
+
+     body.dark-theme .category-header h3 {
+      color: var(--text-color) !important;
+     }
+
+     .category-count {
+       background-color: var(--primary-color-light);
+       color: var(--primary-color);
+       padding: 4px 10px;
+       border-radius: 20px;
+       font-size: 0.75rem;
+       font-weight: 600;
+       border: 1px solid var(--border-color);
+     }
+
+     /* Dark theme specific adjustments */
+     body.dark-theme .category-count {
+       background-color: var(--primary-color);
+       color: white;
+       border-color: var(--primary-color);
+     }
+
+     body.dark-theme .category-header {
+       border-bottom-color: #30363d;
+     }
+
+         .guide-item.hidden {
+       display: none;
+     }
+
+         .guide-button {
+       display: flex;
+       align-items: center;
+       width: 100%;
+       padding: 16px 20px;
+       background-color: var(--guide-button-bg);
+       color: var(--text-color);
+       border: 1px solid var(--border-color);
+       border-radius: 12px;
+       text-decoration: none;
+       transition: var(--tran-03);
+       font-weight: 500;
+       position: relative;
+       overflow: hidden;
+       min-height: 54px;
+     }
+
+     .guide-button::before {
+       content: '';
+       position: absolute;
+       top: 0;
+       left: -100%;
+       width: 100%;
+       height: 100%;
+       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+       transition: left 0.5s ease;
+     }
+
+     .guide-button:hover::before {
+       left: 100%;
+     }
+
+     .guide-button:hover {
+       background-color: var(--primary-color);
+       color: white;
+       border-color: var(--primary-color);
+       transform: translateX(8px);
+       text-decoration: none;
+     }
+
+     .dark-theme .guide-button {
+      border: none !important;
+     }
+
+     .guide-text {
+       flex: 1;
+       text-align: left;
+       font-size: 0.9rem;
+       line-height: 1.4;
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+     }
+
+     .guide-icon {
+       min-width: 40px;
+       height: 32px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 18px;
+       border-radius: 12px;
+       transition: var(--tran-03);
+       margin-right: 12px;
+       color: var(--text-color);
+     }
+
+     .guide-button:hover .guide-icon {
+       background-color: white;
+       color: var(--primary-color);
+       border-radius: 6px;
+     }
+
+     /* Dark theme guide button adjustments */
+     body.dark-theme .guide-button:hover .guide-icon {
+       background-color: var(--sidebar-color);
+       color: var(--text-color);
+     }
+
+     body.dark-theme .guide-button:hover .guide-text {
+      color: var(--text-color);
+     }
+
+     body.dark-theme .guide-button:hover {
+      background-color: var(--primary-color);
+     }
+     
+
+     .guide-arrow {
+       font-size: 20px;
+       transition: var(--tran-03);
+       opacity: 0.6;
+     }
+
+     .guide-button:hover .guide-arrow {
+       transform: translateX(4px);
+       opacity: 1;
+     }
+
+         .see-more-btn {
+       background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a30 100%);
+       transition: var(--tran-03);
+     }
+
+     .see-more-btn:hover {
+       transform: translateY(-2px);
+       box-shadow: var(--shadow-hover);
+     }
+
+     .see-more-btn i {
+       transition: var(--tran-03);
+     }
+
+     .see-more-btn:hover i {
+       transform: rotate(180deg);
+     }
+
+    .loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+      flex-direction: column;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loading-container h5,
+    .loading-container p {
+      color: var(--text-color);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-container {
+      text-align: center;
+      padding: 60px 20px;
+      color: #dc3545;
+    }
+
+    .error-container i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+
+    .error-container h4,
+    .error-container p {
+      color: var(--text-color);
+    }
+
+    .error-container i {
+      color: #dc3545;
+    }
+
+    .retry-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: var(--tran-03);
+    }
+
+    .retry-btn:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+    }
+
+              /* Custom responsive adjustments */
+     @media (max-width: 480px) {
+       .category-card {
+         padding: 20px !important;
+       }
+     }
+  </style>
+</head>
+<body>
+    <%- include('../partials/header') %>
+
+        <!-- Page Header -->
+    <div class="page-header text-white py-5 mb-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-center mb-3">
+                <i class="bx bx-book-open me-3"></i>
+                Step by Step Guides
+            </h1>
+            <p class="lead text-center opacity-75">
+                Comprehensive guides to help you perform various tasks in Enov8 Ecosystem
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="category-container mx-auto px-4">
+        <div id="categoryContainer" class="row g-4 mb-5">
+            <!-- Loading State -->
+            <div class="col-12">
+                <div class="loading-container d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
+                    <div class="loading-spinner mb-4"></div>
+                    <h5>Loading Guide Categories...</h5>
+                    <p class="text-muted">Please wait while we fetch the latest guides for you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const API_BASE = "/api";
+        const container = document.getElementById("categoryContainer");
+
+        async function init() {
+            try {
+                // Clear loading state
+                container.innerHTML = '';
+                
+                // const categories = await fetch(`${API_BASE}/guide-categories`).then(res => res.json());
+                const categoryRes = await fetch(`${API_BASE}/guide-categories`);
+                if (!categoryRes.ok) throw new Error("Failed to fetch categories");
+                const categories = await categoryRes.json();
+
+                if (!categories || categories.length === 0) {
+                    showEmptyState();
+                    return;
+                }
+
+                for (const cat of categories) {
+                    // const guides = await fetch(`${API_BASE}/guides/category/${cat._id}`).then(res => res.json());
+                    const guideRes = await fetch(`${API_BASE}/guides/category/${cat._id}`);
+                    if (!guideRes.ok) throw new Error(`Failed to fetch guides for category: ${cat.name}`);
+                    const guides = await guideRes.json();
+
+                    createCategoryCard(cat, guides);
+                }
+
+                // Initialize see more functionality
+                initializeSeeMore();
+
+            } catch (err) {
+                console.error("Failed to load categories:", err);
+                showErrorState();
+            }
+        }
+
+                 function createCategoryCard(category, guides) {
+             const cardHTML = `
+                 <div class="col-lg-6 col-12">
+                     <div class="card category-card h-100 shadow-sm border-0">
+                          <div class="card-header category-header bg-transparent border-bottom pb-3 mb-3 p-0">
+                              <h3 class="h5 fw-semibold text-body  p-0 m-0">${category.name}</h3>
+                              <span class="category-count float-end m-0">${guides.length} guides</span>
+                          </div>
+                         
+                         <div class="card-body p-0">
+                             <ul class="list-unstyled mb-0" data-category="${category._id}">
+                                 ${guides.map((guide, index) => `
+                                     <li class="guide-item mb-3 ${index >= 4 ? 'hidden' : ''}" data-index="${index}">
+                                         <a href="/guide/detail?guide=${guide._id}" class="btn guide-button w-100 text-start p-3 border rounded-3">
+                                             <div class="guide-icon">
+                                                 <i class="${guide.iconClass || 'bx bx-book-content'}"></i>
+                                             </div>
+                                             <span class="guide-text">${guide.guidetitle}</span>
+                                             <i class="bx bx-right-arrow-alt guide-arrow float-end"></i>
+                                         </a>
+                                     </li>
+                                 `).join('')}
+                             </ul>
+                             
+                             ${guides.length > 4 ? `
+                                 <div class="text-center mt-4">
+                                     <button class="btn see-more-btn text-white border-0 rounded-pill px-4 py-2 fw-medium d-inline-flex align-items-center gap-2 shadow-sm" data-category="${category._id}">
+                                         <span class="see-more-text">See More</span>
+                                         <i class="bx bx-chevron-down"></i>
+                                     </button>
+                                 </div>
+                             ` : ''}
+                         </div>
+                     </div>
+                 </div>
+             `;
+             
+             container.insertAdjacentHTML('beforeend', cardHTML);
+         }
+
+                 function initializeSeeMore() {
+             $(document).on('click', '.see-more-btn', function() {
+                 const categoryId = $(this).data('category');
+                 const $button = $(this);
+                 const $icon = $button.find('i');
+                 const $text = $button.find('.see-more-text');
+                 const $allItems = $(`ul[data-category="${categoryId}"] .guide-item`);
+                 const $hiddenItems = $allItems.filter('[data-index]:nth-child(n+5)'); // Items from 5th position onwards
+                 
+                 if ($text.text() === 'See More') {
+                     // Show hidden items
+                     $hiddenItems.removeClass('hidden').hide().slideDown(300);
+                     $text.text('Show Less');
+                     $icon.removeClass('bx-chevron-down').addClass('bx-chevron-up');
+                 } else {
+                     // Hide items
+                     $hiddenItems.slideUp(300, function() {
+                         $(this).addClass('hidden');
+                     });
+                     $text.text('See More');
+                     $icon.removeClass('bx-chevron-up').addClass('bx-chevron-down');
+                 }
+             });
+         }
+
+                 function showEmptyState() {
+             container.innerHTML = `
+                 <div class="col-12">
+                     <div class="text-center py-5">
+                         <i class="bx bx-folder-open display-1" style="opacity: 0.5; color: var(--text-color);"></i>
+                         <h4 class="mt-3" style="color: var(--text-color);">No Guide Categories Found</h4>
+                         <p style="color: var(--text-color); opacity: 0.7;">There are no guide categories available at the moment.</p>
+                     </div>
+                 </div>
+             `;
+         }
+
+         function showErrorState() {
+             container.innerHTML = `
+                 <div class="col-12">
+                     <div class="text-center py-5">
+                         <i class="bx bx-error-circle display-1 mb-4" style="opacity: 0.7; color: #dc3545;"></i>
+                         <h4 style="color: var(--text-color);">Failed to Load Guide Categories</h4>
+                         <p class="mb-4" style="color: var(--text-color); opacity: 0.7;">Please check your connection and try again.</p>
+                         <button class="btn btn-danger px-4 py-2 rounded-3" onclick="init()">
+                             <i class="bx bx-refresh me-2"></i>Retry
+                         </button>
+                     </div>
+                 </div>
+             `;
+         }
+
+        // Initialize on page load
+        init();
+    </script>
+    <script src="/js/theme.js"></script>
+</body>
+</html>
