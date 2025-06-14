@@ -1,4 +1,4 @@
-# Enov8 Help Portal
+# Enov8 Help Portall
 
 A full-stack Node.js + EJS application to manage FAQs, guides, videos, and chatbot for Enov8 support.
 
