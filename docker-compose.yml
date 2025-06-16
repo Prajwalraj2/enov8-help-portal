@@ -2,7 +2,7 @@ version: '3.8'
 services:
   enov8-app:
     build: .
-    container_name: enov8-help-portal
+    container_name: enov8-help-portal-dev
     ports:
       - "3002:3001"
     env_file:
