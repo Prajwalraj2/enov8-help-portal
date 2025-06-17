@@ -10,8 +10,14 @@ A comprehensive, full-stack help and support portal built with Node.js, Express.
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ---
-## 📸 Demo Screenshot
-![Enov8 Help Portal Screenshot](./public/favicon-32x32.png)
+## 📸 Screenshots from Portal
+
+<div align="center">
+  <img src="public/Enov8 Portal Front Page.png" alt="Enov8 Portal Front Page" width="45%" style="display: inline-block; margin-right: 2%;">
+  <img src="public/Enov8 FAQ .png" alt="Enov8 FAQ Page" width="45%" style="display: inline-block;">
+</div>
+
+---
 
 ## 📋 Table of Contents
 
