@@ -11,4 +11,10 @@ const guideContentSchema = new Schema(
   { timestamps: true }
 );
 
+// 🚀 Performance Indexes
+guideContentSchema.index({ category: 1, guideorder: 1 }); // Compound index for category queries with sorting
+guideContentSchema.index({ category: 1 }); // For category-based queries
+guideContentSchema.index({ guideorder: 1 }); // For sorting by order
+guideContentSchema.index({ createdAt: -1 }); // For recent queries
+
 module.exports = model("GuideContent", guideContentSchema);

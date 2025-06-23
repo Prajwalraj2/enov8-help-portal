@@ -630,50 +630,48 @@
 
     async function buildSidebar() {
       try {
-        const categoryRes = await fetch(`${API_BASE}/guide-categories`);
+        // 🚀 OPTIMIZED: Single API call to get categories with guides
+        const categoryRes = await fetch(`${API_BASE}/guide-categories/with-guides`);
         if (!categoryRes.ok) throw new Error("Failed to fetch categories");
-        const categories = await categoryRes.json();
+        const categoriesWithGuides = await categoryRes.json();
 
-        if (!categories || categories.length === 0) {
+        if (!categoriesWithGuides || categoriesWithGuides.length === 0) {
           showEmptyCategories();
           return;
         }
 
         let sidebarHTML = '';
         
-        for (const cat of categories) {
-          const guideRes = await fetch(`${API_BASE}/guides/category/${cat._id}`);
-          if (!guideRes.ok) continue;
-          const guides = await guideRes.json();
+        categoriesWithGuides.forEach(categoryData => {
+          const guides = categoryData.guides;
+          if (guides.length === 0) return;
 
-          if (guides.length === 0) continue;
-
-                     sidebarHTML += `
-             <div class="category-section ">
-               <div class="category-heading border-bottom">
-                 ${cat.name}
-               </div>
-               <div class="guides-list">
-           `;
+          sidebarHTML += `
+            <div class="category-section ">
+              <div class="category-heading border-bottom">
+                ${categoryData.name}
+              </div>
+              <div class="guides-list">
+          `;
 
           guides.forEach(guide => {
-                         sidebarHTML += `
-               <div class="guide-item">
-                 <button class="guide-button" data-id="${guide._id}" onclick="loadGuide('${guide._id}')">
-                   <div class="guide-icon">
-                     <i class="${guide.iconClass || 'bx bx-book-content'}"></i>
-                   </div>
-                   <span class="guide-text">${guide.guidetitle}</span>
-                 </button>
-               </div>
-             `;
+            sidebarHTML += `
+              <div class="guide-item">
+                <button class="guide-button" data-id="${guide._id}" onclick="loadGuide('${guide._id}')">
+                  <div class="guide-icon">
+                    <i class="${guide.iconClass || 'bx bx-book-content'}"></i>
+                  </div>
+                  <span class="guide-text">${guide.guidetitle}</span>
+                </button>
+              </div>
+            `;
           });
 
           sidebarHTML += `
               </div>
             </div>
           `;
-        }
+        });
 
         sidebarContent.innerHTML = sidebarHTML;
 
