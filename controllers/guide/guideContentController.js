@@ -1,5 +1,14 @@
 const GuideContent = require('../../models/guide/GuideContent');
 
+// Import cache clearing function from guideCategoryController
+const guideCategoryController = require('./guideCategoryController');
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function clearCache() {
+  cache.clear();
+}
+
 // Get all guides for a category
 exports.getByCategory = async (req, res) => {
   const guides = await GuideContent.find({ category: req.params.catId }).sort('guideorder');
@@ -37,6 +46,7 @@ exports.create = async (req, res) => {
       guideorder,
       iconClass
     });
+    clearCache(); // 🚀 Clear cache when data changes
     res.status(201).json(guide);
   } catch (err) {
     res.status(500).json({ error: 'Could not create guide', details: err.message });
@@ -101,6 +111,7 @@ exports.update = async (req, res) => {
     existingGuide.iconClass = iconClass;
 
     const updated = await existingGuide.save();
+    clearCache(); // 🚀 Clear cache when data changes
 
     res.json(updated);
   } catch (err) {
@@ -123,6 +134,7 @@ exports.remove = async (req, res) => {
   try {
     const deleted = await GuideContent.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ msg: 'Guide not found' });
+    clearCache(); // 🚀 Clear cache when data changes
     res.json({ message: 'Guide deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Error deleting guide', details: err.message });

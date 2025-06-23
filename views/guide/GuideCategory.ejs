@@ -372,24 +372,20 @@
                 // Clear loading state
                 container.innerHTML = '';
                 
-                // const categories = await fetch(`${API_BASE}/guide-categories`).then(res => res.json());
-                const categoryRes = await fetch(`${API_BASE}/guide-categories`);
+                // 🚀 OPTIMIZED: Single API call to get categories with guides
+                const categoryRes = await fetch(`${API_BASE}/guide-categories/with-guides`);
                 if (!categoryRes.ok) throw new Error("Failed to fetch categories");
-                const categories = await categoryRes.json();
+                const categoriesWithGuides = await categoryRes.json();
 
-                if (!categories || categories.length === 0) {
+                if (!categoriesWithGuides || categoriesWithGuides.length === 0) {
                     showEmptyState();
                     return;
                 }
 
-                for (const cat of categories) {
-                    // const guides = await fetch(`${API_BASE}/guides/category/${cat._id}`).then(res => res.json());
-                    const guideRes = await fetch(`${API_BASE}/guides/category/${cat._id}`);
-                    if (!guideRes.ok) throw new Error(`Failed to fetch guides for category: ${cat.name}`);
-                    const guides = await guideRes.json();
-
-                    createCategoryCard(cat, guides);
-                }
+                // Create cards for each category with its guides
+                categoriesWithGuides.forEach(categoryData => {
+                    createCategoryCard(categoryData, categoryData.guides);
+                });
 
                 // Initialize see more functionality
                 initializeSeeMore();

@@ -8,4 +8,9 @@ const guideCategorySchema = new Schema(
   { timestamps: true }
 );
 
+// 🚀 Performance Indexes
+guideCategorySchema.index({ order: 1 }); // For sorting by order
+// Note: name already has unique index, no need to add another
+guideCategorySchema.index({ createdAt: -1 }); // For recent queries
+
 module.exports = model("GuideCategory", guideCategorySchema);
